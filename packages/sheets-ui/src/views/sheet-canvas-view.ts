@@ -98,8 +98,13 @@ export class SheetCanvasView {
         const should = workbook.getShouldRenderLoopImmediately();
 
         if (should && !isAddedToExistedScene) {
+            // const newDiv = document.createElement('div');
+            // newDiv.style.position = 'absolute';
+            // newDiv.style.top = '0px';
+            // newDiv.style.left = '0px';
+            // document.body.appendChild(newDiv);
             engine.runRenderLoop(() => {
-                // document.getElementById('app')!.innerHTML = engine.getFps().toString();
+                // newDiv.innerHTML = engine.getFps().toString();
                 scene.render();
             });
         }
@@ -294,6 +299,8 @@ export class SheetCanvasView {
                 // TODO
                 // ...
             }
+
+            this._scene.makeDirty(true);
         });
 
         // create a scroll bar
