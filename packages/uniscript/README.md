@@ -14,7 +14,3 @@
 ```shell
 npm i @univerjs/uniscript
 ```
-
-### API
-
-Check [Univer](https://github.com/dream-num/univer/)

@@ -1,5 +1,7 @@
+import { Dropdown, Tooltip } from '@univerjs/design';
+import { MoreFunctionSingle } from '@univerjs/icons';
 import { useDependency } from '@wendellhu/redi/react-bindings';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { useObservable } from '../../../components/hooks/observable';
 import type { IDisplayMenuItem, IMenuItem } from '../../../services/menu/menu';
@@ -14,6 +16,9 @@ export function Toolbar() {
     const menuService = useDependency(IMenuService);
 
     const [group, setGroup] = useState<IMenuGroup[]>([]);
+    const [collapsedItem, setCollapsedItem] = useState<Array<IDisplayMenuItem<IMenuItem>>>([]);
+
+    const toolbarRef = useRef<HTMLElement>(null);
 
     const position = useObservable(position$, MenuPosition.TOOLBAR_START, true);
 
@@ -39,6 +44,34 @@ export function Toolbar() {
         };
     }, []);
 
+    useEffect(() => {
+        const toolbar = toolbarRef.current;
+        console.clear();
+
+        if (!toolbar) return;
+
+        function resize() {
+            const { width } = toolbar!.getBoundingClientRect();
+            console.clear();
+            console.log(width);
+            // toolbar.style.setProperty('--toolbar-width', `${width}px`);
+            // get all toolbar items's width
+        }
+
+        const observer = new ResizeObserver(resize);
+
+        observer.observe(toolbar);
+
+        resize();
+
+        return () => {
+            observer.unobserve(toolbar);
+        };
+
+        // const { width } = toolbar.getBoundingClientRect();
+        // toolbar.style.setProperty('--toolbar-width', `${width}px`);
+    }, [toolbarRef.current]);
+
     const activeMenuGroup = group.find((g) => g.name === position);
 
     const toolbarGroups =
@@ -56,7 +89,7 @@ export function Toolbar() {
         ) ?? ({} as Record<MenuGroup, Array<IDisplayMenuItem<IMenuItem>>>);
 
     return (
-        <div className={styles.toolbar}>
+        <section ref={toolbarRef} className={styles.toolbar}>
             <div className={styles.toolbarContainer}>
                 {Object.entries(toolbarGroups).map(([key, item]) => (
                     <div key={key} className={styles.toolbarGroup}>
@@ -65,7 +98,17 @@ export function Toolbar() {
                         ))}
                     </div>
                 ))}
+
+                <div className={styles.toolbarGroup}>
+                    <Tooltip title="more" placement="bottom">
+                        <Dropdown overlay={<section>xxxxx</section>}>
+                            <div className={styles.toolbarItemSelect}>
+                                <MoreFunctionSingle />
+                            </div>
+                        </Dropdown>
+                    </Tooltip>
+                </div>
             </div>
-        </div>
+        </section>
     );
 }
