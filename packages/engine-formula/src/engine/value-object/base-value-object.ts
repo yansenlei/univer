@@ -130,6 +130,11 @@ export class BaseValueObject extends ObjectClassType {
         return ErrorValueObject.create(ErrorType.VALUE);
     }
 
+    wildcard(valueObject: BaseValueObject, operator: compareToken): CalculateValueType {
+        /** abstract */
+        return ErrorValueObject.create(ErrorType.VALUE);
+    }
+
     concatenateFront(valueObject: BaseValueObject): CalculateValueType {
         /** abstract */
         return ErrorValueObject.create(ErrorType.VALUE);
